@@ -23,6 +23,7 @@ public class StartGame : MonoBehaviour
     public void LoadFirstLevel()
     {
 
+        Debug.Log("Tset");
         SceneManager.LoadScene(1);
 
     }
@@ -30,6 +31,7 @@ public class StartGame : MonoBehaviour
     public void InvokeFirstLevel(float time)
     {
 
+        Debug.Log("Test");
         Invoke("LoadFirstLevel", time);
 
     }
