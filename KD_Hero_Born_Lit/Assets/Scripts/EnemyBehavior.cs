@@ -10,6 +10,7 @@ public class EnemyBehavior : MonoBehaviour
     public Transform patrolRoute;
     public List<Transform> locations;
     public int Avoiding = 1;
+    public DroneBehavior drone;
 
     private GameBehavior gameBehavior;
     private int locationIndex = 0;
@@ -28,6 +29,10 @@ public class EnemyBehavior : MonoBehaviour
 
             if (lives <= 0)
             {
+                if (gameObject.name == "DroneBox")
+                {
+                    drone.DestroyDrone();
+                }
                 Destroy(this.gameObject);
                 Debug.Log("Enemy down.");
             }
@@ -85,7 +90,6 @@ public class EnemyBehavior : MonoBehaviour
         }
 
         agent.destination = locations[locationIndex].position;
-        Debug.Log(locationIndex + " " + locations.Count);
         locationIndex = (locationIndex + 1) % locations.Count;
 
     }

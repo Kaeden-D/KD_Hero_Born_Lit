@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using CustomExtensionsBehavior;
+using TMPro;
 
 public class GameBehavior : MonoBehaviour, IManagerBehavior
 {
@@ -15,6 +16,14 @@ public class GameBehavior : MonoBehaviour, IManagerBehavior
     public Stack<string> lootStack = new Stack<string>();
     public delegate void DebugDelegate(string newText);
     public DebugDelegate debug = Print;
+
+    public TextMeshProUGUI textSize;
+    public TextMeshProUGUI textHealth;
+    public TextMeshProUGUI textAvoid;
+    public TextMeshProUGUI textItems;
+    public GameObject completeLevelUI;
+    public GameObject loseLevelUI;
+    public GameObject infoUI;
 
     private string state;
 
@@ -39,6 +48,7 @@ public class GameBehavior : MonoBehaviour, IManagerBehavior
 
             ItemsCollected = value;
             Debug.LogFormat("Items: {0}", ItemsCollected);
+            textItems.text = "Items Collected: " + ItemsCollected;
 
             if (ItemsCollected >= maxItems)
             {
@@ -71,6 +81,7 @@ public class GameBehavior : MonoBehaviour, IManagerBehavior
 
             PlayerSize = value;
             Debug.LogFormat("Size: {0}", PlayerSize);
+            textSize.text = "Player Size: " + PlayerSize;
 
         }
 
@@ -105,6 +116,7 @@ public class GameBehavior : MonoBehaviour, IManagerBehavior
 
             PlayerHP = value;
             Debug.LogFormat("Lives: {0}", PlayerHP);
+            textHealth.text = "Player Health: " + PlayerHP;
 
             if (PlayerHP <= 0)
             {
@@ -132,7 +144,13 @@ public class GameBehavior : MonoBehaviour, IManagerBehavior
 
         get { return EnemyAvoid; }
 
-        set { EnemyAvoid = value; }
+        set 
+        { 
+
+            EnemyAvoid = value; 
+            textAvoid.text = "Enemy Avoiding: " + EnemyAvoid;
+
+        }
 
     }
 
@@ -140,11 +158,39 @@ public class GameBehavior : MonoBehaviour, IManagerBehavior
     void Start()
     {
 
+        Items = Items;
+        HP = HP;
+        Size = Size;
+        Avoid = Avoid;
+
         Initialize();
         InventoryList<string> inventoryList = new InventoryList<string>();
 
         inventoryList.SetItem("Potion");
         Debug.Log(inventoryList.item);
+
+    }
+    
+    void Update()
+    {
+
+        if (showWinScreen)
+        {
+            completeLevelUI.SetActive(true);
+            HideInfo();
+        }
+        else if(showLossScreen)
+        {
+            loseLevelUI.SetActive(true);
+            HideInfo();
+        }
+
+    }
+
+    public void HideInfo()
+    {
+
+        infoUI.SetActive(false);
 
     }
 
@@ -189,6 +235,8 @@ public class GameBehavior : MonoBehaviour, IManagerBehavior
 
     }
 
+
+    /*
     void OnGUI()
     {
 
@@ -242,6 +290,7 @@ public class GameBehavior : MonoBehaviour, IManagerBehavior
         }
 
     }
+    */
 
     public void PrintLootReport()
     {
@@ -254,9 +303,20 @@ public class GameBehavior : MonoBehaviour, IManagerBehavior
 
     }
 
-    // Update is called once per frame
-    void Update()
+    public void Complete_Restart()
     {
-        
+
+        Debug.Log("Game Restarted");
+        SceneManager.LoadScene(0);
+
     }
+
+    public void Complete_Credits()
+    {
+
+        Debug.Log("Game Completed");
+        SceneManager.LoadScene(2);
+
+    }
+
 }

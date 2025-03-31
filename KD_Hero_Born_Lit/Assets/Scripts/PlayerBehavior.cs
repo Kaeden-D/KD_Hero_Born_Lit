@@ -72,6 +72,13 @@ public class PlayerBehavior : MonoBehaviour
 
         }
 
+        if (Input.GetKey("k"))
+        {
+
+            HealthChange(-1);
+
+        }
+
     }
 
     // FixedUpdate is called at a fixed frame rate
